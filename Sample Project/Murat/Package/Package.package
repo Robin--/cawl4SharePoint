@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="1b051142-1329-4c41-ab88-a1520ca2e7ee" solutionId="1b051142-1329-4c41-ab88-a1520ca2e7ee" resetWebServer="false" name="Murat" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <features>
+    <featureReference itemId="e755c29f-4603-450d-a960-64a25ed6ddbd" />
+  </features>
+</package>

@@ -1,0 +1,11 @@
+C:\Users\sharepointtest\documents\visual studio 2010\Projects\Murat\Murat\bin\Debug\Murat.dll
+C:\Users\sharepointtest\documents\visual studio 2010\Projects\Murat\Murat\bin\Debug\Murat.pdb
+C:\Users\sharepointtest\documents\visual studio 2010\Projects\Murat\Murat\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\sharepointtest\documents\visual studio 2010\Projects\Murat\Murat\obj\Debug\Murat.dll
+C:\Users\sharepointtest\documents\visual studio 2010\Projects\Murat\Murat\obj\Debug\Murat.pdb
+C:\Users\M_AKDENIZ1\Documents\Visual Studio 2010\Projects\Murat\Murat\bin\Debug\Murat.dll
+C:\Users\M_AKDENIZ1\Documents\Visual Studio 2010\Projects\Murat\Murat\bin\Debug\Murat.pdb
+C:\Users\M_AKDENIZ1\Documents\Visual Studio 2010\Projects\Murat\Murat\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\M_AKDENIZ1\Documents\Visual Studio 2010\Projects\Murat\Murat\obj\Debug\Murat.dll
+C:\Users\M_AKDENIZ1\Documents\Visual Studio 2010\Projects\Murat\Murat\obj\Debug\Murat.pdb
+C:\Users\M_AKDENIZ1\Documents\Visual Studio 2010\Projects\Murat\Murat\bin\Debug\Microsoft.Sharepoint.Sandbox.dll

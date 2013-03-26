@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Feature xmlns="http://schemas.microsoft.com/sharepoint/" Id="4628c10d-261c-4267-9057-cf2f89aef920" Scope="Site" Title="Murat Feature1">
+  <ElementManifests>
+    <ElementManifest Location="cawlTestPage\Elements.xml" />
+    <ElementFile Location="cawlTestPage\cawlTestPage.webpart" />
+  </ElementManifests>
+</Feature>

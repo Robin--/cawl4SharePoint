@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Solution xmlns="http://schemas.microsoft.com/sharepoint/" SolutionId="1b051142-1329-4c41-ab88-a1520ca2e7ee" SharePointProductVersion="14.0">
+  <Assemblies>
+    <Assembly Location="Murat.dll" DeploymentTarget="GlobalAssemblyCache">
+      <SafeControls>
+        <SafeControl Assembly="Murat, Version=1.0.0.0, Culture=neutral, PublicKeyToken=23b2ef16aba353bd" Namespace="Murat.cawlTestPage" TypeName="*" />
+      </SafeControls>
+    </Assembly>
+  </Assemblies>
+  <TemplateFiles>
+    <TemplateFile Location="CONTROLTEMPLATES\Murat\cawlTestPage\cawlTestPageUserControl.ascx" />
+  </TemplateFiles>
+  <FeatureManifests>
+    <FeatureManifest Location="Murat_Feature1\Feature.xml" />
+  </FeatureManifests>
+</Solution>
