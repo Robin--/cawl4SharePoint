@@ -292,42 +292,23 @@ namespace cawl4SharePoint
                 foreach (object item in _join)
                 {
                     string[] ItemArray = ((string[])item);
-
                     joinstring.Append(join(ItemArray[0], ItemArray[1]));
-
-
-
                 }
+
                 _query.Joins = joinstring.ToString();
-
-
-
-
-
-                //eğer site komudu ile bir site set edilmemişse
-                //if (web == null) { Site(); }
-
+                
                 StringBuilder tt = new StringBuilder();
-
-
-
-
-                //////////
-
-
-                //join var mı diye bakıyoz
+                
+                
                 if (_join.Count != 0)
                 {
 
                     StringBuilder ProjectedFields = new StringBuilder();
 
-                    //her bir join için loop çünkü birden fazla
+                    //
                     foreach (object Join_item in _join)
                     {
                         string[] Join_ItemArray = ((string[])Join_item);
-
-                        //  ParentListName= Join_ItemArray[0]  , ChildListLookupColumnName Join_ItemArray[1]
-
                         if (_select.Count != 0)
                         {
 
@@ -356,7 +337,7 @@ namespace cawl4SharePoint
 
 
 
-            }//join sonu
+            }
 
 
 
