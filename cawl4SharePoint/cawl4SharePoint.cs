@@ -423,7 +423,8 @@ namespace cawl4SharePoint
 
         public void Insert(string ListName)
         {
-
+            
+            _List_Name = ListName;
             web.AllowUnsafeUpdates = true;
 
             // Get the list object 
