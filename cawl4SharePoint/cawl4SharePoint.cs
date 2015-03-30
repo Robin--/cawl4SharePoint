@@ -10,12 +10,12 @@ namespace cawl4SharePoint
 {
 
     /*
-    * cawl4sharepoint: http://www.cawl4sharepoint.com/
+    * cawl4sharepoint: http://www.makdeniz.com/cawl4sharepoint/
     *
     * Copyright (c) 2012 Zenithsoft.co
     * Author: Murat Akdeniz 
     * www.makdeniz.com
-    * Version : 2.0
+    * Version : 3.0
     * 
     * Permission is hereby granted, free of charge, to any person obtaining a copy
     * of this software and associated documentation files (the "Software"), to deal
@@ -547,594 +547,10 @@ namespace cawl4SharePoint
 
     }
 
-    public class cawl_Calendar
-    {
-        
-        string start_day = "Monday";
-        string month_type = "long";
-        string day_type = "short";
-        string show_next_prev = "false";
-        string next_prev_url  = null;
-        ArrayList _data = new ArrayList();
-
-
-        //month names
-        string _short_January = "Jan";
-        string _short_February = "Feb";
-        string _short_March = "Mar";
-        string _short_April = "Apr";
-        string _short_May = "May";
-        string _short_June = "Jun";
-        string _short_July = "Jul";
-        string _short_August = "Aug";
-        string _short_September = "Sep";
-        string _short_October = "Oct";
-        string _short_November = "Nov";
-        string _short_December = "Dec";
-
-        string _long_January = "January";
-        string _long_February = "February";
-        string _long_March = "March";
-        string _long_April = "April";
-        string _long_May = "May";
-        string _long_June = "June";
-        string _long_July = "July";
-        string _long_August = "August";
-        string _long_September = "September";
-        string _long_October = "October";
-        string _long_November = "November";
-        string _long_December = "December";
-
-        //days name
-
-        string _long_Sunday = "Sunday";
-        string _long_Monday = "Monday";
-        string _long_Tuesday = "Tuesday";
-        string _long_Wednesday = "Wednesday";
-        string _long_Thursday = "Thursday";
-        string _long_Friday = "Friday";
-        string _long_Saturday = "Saturday";
-
-        string _short_Sunday = "Sun";
-        string _short_Monday = "Mon";
-        string _short_Tuesday = "Tue";
-        string _short_Wednesday = "Wed";
-        string _short_Thursday = "Thu";
-        string _short_Friday = "Fri";
-        string _short_Saturday = "Sat";
-
-
-
-
-        //template
-        string _Template_table_open = "<table border=\"0\" cellpadding=\"4\" cellspacing=\"0\">";
-        string _Template_heading_row_start = "<tr>";
-        string _Template_heading_previous_cell = "<th><a href=\"{previous_url}\">&lt;&lt;</a></th>";
-        string _Template_heading_title_cell = "<th colspan=\"{colspan}\">{heading}</th>";
-        string _Template_heading_next_cell = "<th><a href=\"{next_url}\">&gt;&gt;</a></th>";
-        string _Template_heading_row_end = "</tr>";
-        string _Template_week_row_start = "<tr>";
-        string _Template_week_day_cell = "<td>{week_day}</td>";
-        string _Template_week_row_end = "</tr>";
-        string _Template_cal_row_start = "<tr>";
-        string _Template_cal_cell_start = "<td>";
-        string _Template_cal_cell_start_today = "<td>";
-        string _Template_cal_cell_content = "<a href=\"{content}\">{day}</a>";
-        string _Template_cal_cell_content_today = "<a href=\"{content}\"><strong>{day}</strong></a>";
-        string _Template_cal_cell_no_content = "{day}";
-        string _Template_cal_cell_no_content_today = "<strong>{day}</strong>";
-        string _Template_cal_cell_blank = "&nbsp;";
-        string _Template_cal_cell_end = "</td>";
-        string _Template_cal_cell_end_today = "</td>";
-        string _Template_cal_row_end = "</tr>";
-        string _Template_table_close = "</table>";
-
-
-
-        public string Generate(string year = "", string month = "")
-        {
-            // Set and validate the supplied month/year
-            if (year == "") { year = DateTime.Now.Year.ToString(); }
-
-            if (month == "") { month = DateTime.Now.Month.ToString(); }
-
-            if (year.Length == 1) { year = "200" + year; }
-            if (year.Length == 2) { year = "20" + year; }
-            if (month.Length == 1) { month = "0" + month; }
-
-            ArrayList adjusted_date = adjust_date(month, year);
-            foreach (object item in adjusted_date)
-            {
-                string[] ItemArray = ((string[])item);
-                month = ItemArray[0].ToString();
-                year = ItemArray[1].ToString();
-
-
-            }
-
-
-            // Determine the total days in the month
-            int total_days = get_total_days(month, year);
-
-            // Set the starting day of the week
-            int startday = start_days();
-
-
-            // Set the starting day number
-            DateTime date = new DateTime();
-            date = DateTime.ParseExact(year + "-" + month + "-01", "yyyy-MM-dd", null);
-            int day = startday + 1 - day_no_from_name(date.DayOfWeek.ToString());
-
-            while (day > 1)
-            {
-                day -= 7;
-            }
-
-            // Set the current month/year/day
-            // We use this to determine the "today" date
-            string cur_year = DateTime.Now.Year.ToString();
-            string cur_month = DateTime.Now.Month.ToString();
-            string cur_day = DateTime.Now.Day.ToString();
-
-            string is_current_month = (cur_year == year & cur_month == month) ? "TRUE" : "FALSE";
-
-            // Begin building the calendar output
-            StringBuilder output = new StringBuilder();
-
-            output.Append(_Template_table_open);
-            output.Append("\n");
-            output.Append("\n");
-
-            output.Append(_Template_heading_row_start);
-            output.Append("\n");
-
-            // "previous" month link
-            if (show_next_prev != "false")
-            {
-                
-                ArrayList adjusted_date_link = adjust_date((Convert.ToInt16(month)-1).ToString(), year);
-                string month_link="";
-                string year_link="";
-                foreach (object item in adjusted_date_link)
-                    {
-                        string[] ItemArray = ((string[])item);
-                        month_link = ItemArray[0].ToString();
-                        year_link = ItemArray[1].ToString();
-
-
-                    }
-                
-                output.Append(_Template_heading_previous_cell.Replace("{previous_url}",next_prev_url+"Year="+year_link+"&Month="+month_link));
-                
-                output.Append("\n");
-            }
-
-            // Heading containing the month/year
-            int colspan = (show_next_prev != null) ? 5 : 7;
-
-            _Template_heading_title_cell = _Template_heading_title_cell.Replace("{colspan}", colspan.ToString());
-            _Template_heading_title_cell = _Template_heading_title_cell.Replace("{heading}", get_month_name(month) + "&nbsp;" + year);
-
-            output.Append(_Template_heading_title_cell);
-            output.Append("\n");
-
-            // "next" month link
-            
-            if (show_next_prev != null)
-            {
-
-                ArrayList adjusted_date_link = adjust_date((Convert.ToInt16(month) + 1).ToString(), year);
-                string month_link = "";
-                string year_link = "";
-                foreach (object item in adjusted_date_link)
-                {
-                    string[] ItemArray = ((string[])item);
-                    month_link = ItemArray[0].ToString();
-                    year_link = ItemArray[1].ToString();
-
-
-                }
-
-
-                output.Append(_Template_heading_next_cell.Replace("{next_url}", next_prev_url + "Year="+year_link + "&Month=" + month_link));
-                output.Append("\n");
-            }
-
-
-            output.Append("\n");
-            output.Append(_Template_heading_row_end);
-            output.Append("\n");
-
-            // Write the cells containing the days of the week
-            output.Append("\n");
-            output.Append(_Template_week_row_start);
-            output.Append("\n");
-
-            for (int i = 0; i < 7; i++)
-            {
-                output.Append(_Template_week_day_cell.Replace("{week_day}", get_day_names((startday + i) % 7)));
-            }
-
-            output.Append("\n");
-            output.Append(_Template_week_row_end);
-            output.Append("\n");
-
-            // Build the main body of the calendar
-            while (day <= total_days)
-            {
-                output.Append("\n");
-                output.Append(_Template_cal_row_start);
-                output.Append("\n");
-
-                for (int i = 0; i < 7; i++)
-                {
-                    output.Append((is_current_month == "TRUE" & day.ToString() == cur_day) ? _Template_cal_cell_start_today : _Template_cal_cell_start);
-
-                    if (day > 0 & day <= total_days)
-                    {
-                        if (_data.Count != 0)
-                        {
-                            // Cells with content
-                            string temp = (is_current_month == "TRUE" & day.ToString() == cur_day) ? _Template_cal_cell_content_today : _Template_cal_cell_content;
-                            
-                            string content = "";
-                            foreach (object item in _data)
-                            {
-                                string[] DataItemArray = ((string[])item);
-                                if (DataItemArray[0] == day.ToString())
-                                {
-                                    content = content + DataItemArray[1];
-                                }
-
-                            }
-
-                            output.Append(temp.Replace("{content}", content).Replace("{day}", day.ToString()));
-
-
-                        }
-                        else
-                        {
-                            // Cells with no content
-                            string temp = (is_current_month == "TRUE" & day.ToString() == cur_day) ? _Template_cal_cell_no_content_today : _Template_cal_cell_no_content;
-                            output.Append(temp.Replace("{day}", day.ToString()));
-                        }
-                    }
-                    else
-                    {
-                        // Blank cells
-                        output.Append(_Template_cal_cell_blank);
-                    }
-
-                    output.Append((is_current_month == "TRUE" & day.ToString() == cur_day) ? _Template_cal_cell_end_today : _Template_cal_cell_end);
-                    day++;
-                }
-
-                output.Append("\n");
-                output.Append(_Template_cal_row_end);
-                output.Append("\n");
-            }
-
-            output.Append("\n");
-            output.Append(_Template_table_close);
-
-            return output.ToString();
-
-        }
-        
-        private int start_days()
-        {
-            if (start_day == null)
-            {
-                return 0;
-            }
-            else
-            {
-                if (start_day == "Sunday") { return 0; }
-                else if (start_day == "Monday") { return 1; }
-                else if (start_day == "Tuesday") { return 2; }
-                else if (start_day == "Wednesday") { return 3; }
-                else if (start_day == "Thursday") { return 4; }
-                else if (start_day == "Friday") { return 5; }
-                else if (start_day == "Saturday") { return 6; }
-                else { return 0; };
-
-            }
-
-
-        }
-        
-        public void AddEvent(int DayNumber, string Content)
-        {
-            _data.Add(new string[] { DayNumber.ToString(), Content });
-        }
-
-        public void SetLongDayNameTemplate(string Sunday, string Monday, string Tuesday, string Wednesday, string Thursday, string Friday, string Saturday)
-        {
-            _long_Sunday = Sunday;
-            _long_Monday = Monday;
-            _long_Tuesday = Tuesday;
-            _long_Wednesday = Wednesday;
-            _long_Thursday = Thursday;
-            _long_Friday = Friday;
-            _long_Saturday = Saturday;
-
-        }
-
-        public void SetShortDayNameTemplate(string Sunday, string Monday, string Tuesday, string Wednesday, string Thursday, string Friday, string Saturday)
-        {
-            _short_Sunday = Sunday;
-            _short_Monday = Monday;
-            _short_Tuesday = Tuesday;
-            _short_Wednesday = Wednesday;
-            _short_Thursday = Thursday;
-            _short_Friday = Friday;
-            _short_Saturday = Saturday;
-
-        }
-
-        public void SetLongMonthNameTemplate(string January, string February, string March, string April, string May, string June, string July, string August, string September, string October, string November, string December)
-        {
-            _long_January = January;
-            _long_February = February;
-            _long_March = March;
-            _long_April = April;
-            _long_May = May;
-            _long_June = June;
-            _long_July = July;
-            _long_August = August;
-            _long_September = September;
-            _long_October = October;
-            _long_November = November;
-            _long_December = December;
-
-        }
-
-        public void SetShortMonthNameTemplate(string January, string February, string March, string April, string May, string June, string July, string August, string September, string October, string November, string December)
-        {
-            _short_January = January;
-            _short_February = February;
-            _short_March = March;
-            _short_April = April;
-            _short_May = May;
-            _short_June = June;
-            _short_July = July;
-            _short_August = August;
-            _short_September = September;
-            _short_October = October;
-            _short_November = November;
-            _short_December = December;
-
-        }
-
-        public void SetDayNameType(string DayNameType)
-        {
-            if (DayNameType == "short")
-            {
-                day_type = "short";
-            }
-            else
-            {
-                day_type = "long";
-            }
-        }
-
-        public void SetMonthNameType(string MonthNameType)
-        {
-            if (MonthNameType == "short")
-            {
-                month_type = "short";
-            }
-            else
-            {
-                month_type = "long";
-            }
-        }
-
-        public void SetStartDay(string StartDay)
-        {
-            if (StartDay == "Saturday") { start_day = StartDay; }
-            else if (StartDay == "Monday") { start_day = StartDay; }
-            else if (StartDay == "Tuesday") { start_day = StartDay; }
-            else if (StartDay == "Wednesday") { start_day = StartDay; }
-            else if (StartDay == "Thursday") { start_day = StartDay; }
-            else if (StartDay == "Friday") { start_day = StartDay; }
-            else { start_day = StartDay; }
-
-        }
-
-        public void SetPrevNextUrl(string url)
-        {
-             show_next_prev = "true";
-             next_prev_url = url; 
-        }
-        
-        private ArrayList adjust_date(string month, string year)
-        {
-            ArrayList date = new ArrayList();
-
-            int new_month = Convert.ToInt16(month);
-            int new_year = Convert.ToInt16(year);
-            string r_month;
-            string r_year;
-
-            while (new_month > 12)
-            {
-                new_month -= 12;
-                new_year++;
-                r_month = new_month.ToString();
-                r_year = new_year.ToString();
-            }
-
-            while (new_month <= 0)
-            {
-                new_month += 12;
-                new_year--;
-
-            }
-
-            r_month = new_month.ToString();
-            r_year = new_year.ToString();
-
-            if (r_month.Length == 1)
-            {
-                r_month = '0' + r_month;
-            }
-
-
-
-            date.Add(new string[] { r_month, r_year });
-
-            return date;
-        }
-
-        private int get_total_days(string month, string year)
-        {
-            int[] days_in_month = new int[12] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-
-            if (Convert.ToInt16(month) < 1 || Convert.ToInt16(month) > 12)
-            {
-                return 0;
-            }
-
-            // Is the year a leap year?
-            if (Convert.ToInt16(month) == 2)
-            {
-                if (Convert.ToInt16(year) % 400 == 0 || (Convert.ToInt16(year) % 4 == 0 & Convert.ToInt16(year) % 100 != 0))
-                {
-                    return 29;
-                }
-            }
-
-            return days_in_month[Convert.ToInt16(month) - 1];
-        }
-
-        private string get_month_name(string month)
-        {
-            string name = "";
-            if (month_type == "short")
-            {
-                if (month == "01") { name = _short_January; }
-                if (month == "02") { name = _short_February; }
-                if (month == "03") { name = _short_March; }
-                if (month == "04") { name = _short_April; }
-                if (month == "05") { name = _short_May; }
-                if (month == "06") { name = _short_June; }
-                if (month == "07") { name = _short_July; }
-                if (month == "08") { name = _short_August; }
-                if (month == "09") { name = _short_September; }
-                if (month == "10") { name = _short_October; }
-                if (month == "11") { name = _short_November; }
-                if (month == "12") { name = _long_December; }
-
-            }
-            else
-            {
-
-                if (month == "01") { name = _long_January; }
-                if (month == "02") { name = _long_February; }
-                if (month == "03") { name = _long_March; }
-                if (month == "04") { name = _long_April; }
-                if (month == "05") { name = _long_May; }
-                if (month == "06") { name = _long_June; }
-                if (month == "07") { name = _long_July; }
-                if (month == "08") { name = _long_August; }
-                if (month == "09") { name = _long_September; }
-                if (month == "10") { name = _long_October; }
-                if (month == "11") { name = _long_November; }
-                if (month == "12") { name = _long_December; }
-
-            }
-
-            return name;
-        }
-
-        private string get_day_names(int daynumber)
-        {
-            
-            string value = "";
-            if (day_type == "long")
-            {
-                if (daynumber == 0) { value = _long_Sunday; }
-                if (daynumber == 1) { value = _long_Monday; }
-                if (daynumber == 2) { value = _long_Tuesday; }
-                if (daynumber == 3) { value = _long_Wednesday; }
-                if (daynumber == 4) { value = _long_Thursday; }
-                if (daynumber == 5) { value = _long_Friday; }
-                if (daynumber == 6) { value = _long_Saturday; }
-
-            }
-            else if (day_type == "short")
-            {
-                if (daynumber == 0) { value = _short_Sunday; }
-                if (daynumber == 1) { value = _short_Monday; }
-                if (daynumber == 2) { value = _short_Tuesday; }
-                if (daynumber == 3) { value = _short_Wednesday; }
-                if (daynumber == 4) { value = _short_Thursday; }
-                if (daynumber == 5) { value = _short_Friday; }
-                if (daynumber == 6) { value = _short_Saturday; }
-
-            }
-            else
-            {
-                if (daynumber == 0) { value = "su"; }
-                if (daynumber == 1) { value = "mo"; }
-                if (daynumber == 2) { value = "tu"; }
-                if (daynumber == 3) { value = "we"; }
-                if (daynumber == 4) { value = "th"; }
-                if (daynumber == 5) { value = "fr"; }
-                if (daynumber == 6) { value = "sa"; }
-            }
-
-            return value;
-
-        }
-
-        private int day_no_from_name(string dayname)
-        {
-            int daynumber = 0;
-
-            if (dayname == "Sunday") { daynumber = 0; }
-            if (dayname == "Monday") { daynumber = 1; }
-            if (dayname == "Tuesday") { daynumber = 2; }
-            if (dayname == "Wednesday") { daynumber = 3; }
-            if (dayname == "Thursday") { daynumber = 4; }
-            if (dayname == "Friday") { daynumber = 5; }
-            if (dayname == "Saturday") { daynumber = 6; }
-
-            return daynumber;
-        }
-
-        #region template
-
-        public void Template_table_open(string template) { _Template_table_open = template; }
-        public void Template_heading_row_start(string template) { _Template_heading_row_start = template; }
-        public void Template_heading_previous_cell(string template) { _Template_heading_previous_cell = template; }
-        public void Template_heading_title_cell(string template) { _Template_heading_title_cell = template; }
-        public void Template_heading_next_cell(string template) { _Template_heading_next_cell = template; }
-        public void Template_heading_row_end(string template) { _Template_heading_row_end = template; }
-        public void Template_week_row_start(string template) { _Template_week_row_start = template; }
-        public void Template_week_day_cell(string template) { _Template_week_day_cell = template; }
-        public void Template_week_row_end(string template) { _Template_week_row_end = template; }
-        public void Template_cal_row_start(string template) { _Template_cal_row_start = template; }
-        public void Template_cal_cell_start(string template) { _Template_cal_cell_start = template; }
-        public void Template_cal_cell_start_today(string template) { _Template_cal_cell_start_today = template; }
-        public void Template_cal_cell_content(string template) { _Template_cal_cell_content = template; }
-        public void Template_cal_cell_content_today(string template) { _Template_cal_cell_content_today = template; }
-        public void Template_cal_cell_no_content(string template) { _Template_cal_cell_no_content = template; }
-        public void Template_cal_cell_no_content_today(string template) { _Template_cal_cell_no_content_today = template; }
-        public void Template_cal_cell_blank(string template) { _Template_cal_cell_blank = template; }
-        public void Template_cal_cell_end(string template) { _Template_cal_cell_end = template; }
-        public void Template_cal_cell_end_today(string template) { _Template_cal_cell_end_today = template; }
-        public void Template_cal_row_end(string template) { _Template_cal_row_end = template; }
-        public void Template_table_close(string template) { _Template_table_close = template; }
-
-
-        #endregion template
-    }
-
     public class cawl_Functions
     {
-
+        //to avoid null point exception it can be used.
+        //When there is no value in field you get null pointer exception.
         public string ChecklistItem(SPListItem listItem, string columnName)
         {
 
@@ -1149,6 +565,7 @@ namespace cawl4SharePoint
             }
         }
 
+        //it will automatically convert 12#XXXXXx value to object 
         public string GivelookUpValue(SPListItem listItem, string columnName,Boolean Id=false)
         {
 
@@ -1173,6 +590,7 @@ namespace cawl4SharePoint
             }
         }
 
+        // to check whether item is null or not
         public string Check4Null(SPListItem listItem, string columnName)
         {
 
@@ -1184,6 +602,36 @@ namespace cawl4SharePoint
             else
             {
                 return "-";
+            }
+        }
+        
+        public SPUser makeFiledUserObject(SPListItem item, string fieldName)
+        {
+            
+                string fieldValue = item[fieldName] as string;
+                if (string.IsNullOrEmpty(fieldValue)) return null;
+                int id = int.Parse(fieldValue.Split(';')[0]);
+                SPUser user = item.Web.AllUsers.GetByID(id);
+                return user;
+            
+            
+        }
+
+        // to check whether current user is member of a sharepoint group
+        public bool IsMemberOf(string groupName)
+        {
+            SPUser user = SPContext.Current.Web.CurrentUser;
+
+            try
+            {
+                if (user.Groups[groupName] != null)
+                    return true;
+                else
+                    return false;
+            }
+            catch
+            {
+                return false;
             }
         }
 
